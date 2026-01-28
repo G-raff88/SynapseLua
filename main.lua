@@ -1,22 +1,19 @@
 BrainFactory = require("logic.brain.brain")
-local brain = BrainFactory.new(3,2)
+local brain = BrainFactory.new(1,2,3,10)
 
-brain:set_input(3,1)
 
-brain:step()
 
-for i, v in pairs(brain.input_nodes) do
-    print(i,v,brain.neurons[v].activation)
+function love.load()
+    math.randomseed(os.time())
 end
 
-print()
-
-for i, v in ipairs(brain.output_nodes) do
-    print(i,v,brain.neurons[v].activation)
+function love.update(dt)
+    brain:set_input(3,math.sin(love.timer.getTime()))
+    brain:step()
+    brain:update(dt)
 end
 
-print()
-
-for i, v in ipairs(brain.neurons) do
-    print(i,v.activation)
+function love.draw()
+    brain:draw(love.timer.getDelta(), 40, 100) 
+    print(brain.neurons[6].activation)
 end
