@@ -1,11 +1,13 @@
 local World = {}
 
-function World.new()
+function World.new(width, height)
     local world = {
         creatures = {};
         time = 0;
         step_time = 1;
-        last_step_time = 0
+        last_step_time = 0;
+        width = width or 600;
+        height = height or 600
     }
 
     function world:update(dt)
@@ -48,11 +50,20 @@ function World.new()
                     end
                 end
             end
+
+            if creature.pos.x > self.width or creature.pos.x < 0 then
+                creature.pos.x = creature.pos.x % self.width
+            end
+            if creature.pos.y > self.height or creature.pos.y < 0 then
+                creature.pos.y = creature.pos.y % self.height
+            end
+
         end
 
         if self.last_step_time+self.step_time < self.time then
             self.last_step_time = self.time
         end
+
     end
 
     function world:draw()

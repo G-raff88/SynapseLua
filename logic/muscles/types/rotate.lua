@@ -2,7 +2,7 @@ local Muscle = {}
 
 function Muscle.new(neuron_indexes, strength)
     local muscle = {
-        output_indexes = neuron_indexes or {1},
+        output_indexes = neuron_indexes or {1};
         
         signals = {},
         
@@ -17,10 +17,11 @@ function Muscle.new(neuron_indexes, strength)
     end
 
     function muscle:move(creature)
+                
         if #self.signals >= 1 then
-            creature.pos.x = creature.pos.x + self.strength * self.signals[1] * math.sin(creature.rot)
-            creature.pos.y = creature.pos.y + self.strength * self.signals[1] * math.cos(creature.rot)
+            creature.rot = creature.rot + self.strength * self.signals[1]
         end
+
         
     end
     
