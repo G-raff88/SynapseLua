@@ -413,27 +413,4 @@ function NeuroBrain.new(input_count, output_count, hidden_count, synapses_count)
     return brain
 end
 
--- ============ МЕТОДЫ ФАБРИКИ ============
--- Эти методы работают с самой фабрикой NeuroBrain
-
--- Создать мутировавшую копию мозга
-function NeuroBrain.create_mutated_copy(original_brain, mutation_rate)
-    mutation_rate = mutation_rate or 0.1
-    
-    -- Создаем новый мозг с теми же параметрами
-    local new_brain = NeuroBrain.new(
-        #original_brain.input_nodes,
-        #original_brain.output_nodes
-    )
-    
-    -- Копируем нейроны
-    new_brain.neurons = {}
-    new_brain.next_neuron_id = 1
-    
-    -- ... здесь была бы логика копирования с мутациями
-    
-    return new_brain
-end
-
--- Вернуть фабрику
 return NeuroBrain

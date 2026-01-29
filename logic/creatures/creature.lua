@@ -20,33 +20,4 @@ function Creature.new(pos, rot, brain, sensors, muscles, energy, radius, color)
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 return Creature
