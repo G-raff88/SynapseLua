@@ -1,19 +1,20 @@
-BrainFactory = require("logic.brain.brain")
-local brain = BrainFactory.new(1,2,3,10)
-
-
-
+package.path = package.path .. ";../?.lua"
 function love.load()
-    math.randomseed(os.time())
+    creature = require("logic.creatures.types.1st").new()
 end
 
 function love.update(dt)
-    brain:set_input(3,math.sin(love.timer.getTime()))
-    brain:step()
-    brain:update(dt)
+    creature.brain:set_input(1,math.sin(love.timer.getTime()))
+    creature.brain:step()
+
+    creature.muscles[1]:update(creature)
+    creature.muscles[1]:move(creature)
+
+    creature.rot = love.timer.getTime()
 end
 
 function love.draw()
-    brain:draw(love.timer.getDelta(), 40, 100) 
-    print(brain.neurons[6].activation)
+    creature.brain:draw(love.timer.getDelta(), 60, 30) 
+    print(creature.brain.neurons[6].activation)
+    creature:draw()
 end
