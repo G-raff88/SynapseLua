@@ -156,6 +156,76 @@ function NeuroBrain.new(input_count, output_count, hidden_count, synapses_count)
         return false
     end
     
+-- Добавить новый нейрон
+function brain:add_neuron(neuron_type, activation)
+    neuron_type = neuron_type or "hidden"
+    activation = activation or 0
+    
+    -- Создаем ID нейрона
+    local neuron_id = self.next_neuron_id
+    self.next_neuron_id = self.next_neuron_id + 1
+    
+    -- Создаем нейрон
+    self.neurons[neuron_id] = {
+        id = neuron_id,
+        activation = activation,
+        type = neuron_type
+    }
+    
+    -- Добавляем в соответствующий список
+    if neuron_type == "input" then
+        table.insert(self.input_nodes, neuron_id)
+        -- Для входных нейронов сбрасываем активацию
+        self.neurons[neuron_id].activation = 0
+    elseif neuron_type == "output" then
+        table.insert(self.output_nodes, neuron_id)
+    elseif neuron_type == "bias" then
+        -- Bias-нейрон всегда активен
+        self.neurons[neuron_id].activation = 1.0
+    end
+    
+    return neuron_id
+end
+
+-- Удалить нейрон (осторожно!)
+function brain:remove_neuron(neuron_id)
+    if not self.neurons[neuron_id] then
+        return false
+    end
+    
+    local neuron_type = self.neurons[neuron_id].type
+    
+    -- Удаляем из списков
+    if neuron_type == "input" then
+        for i, id in ipairs(self.input_nodes) do
+            if id == neuron_id then
+                table.remove(self.input_nodes, i)
+                break
+            end
+        end
+    elseif neuron_type == "output" then
+        for i, id in ipairs(self.output_nodes) do
+            if id == neuron_id then
+                table.remove(self.output_nodes, i)
+                break
+            end
+        end
+    end
+    
+    -- Удаляем нейрон
+    self.neurons[neuron_id] = nil
+    
+    -- Удаляем все связанные синапсы
+    for i = #self.synapses, 1, -1 do
+        local synapse = self.synapses[i]
+        if synapse.from == neuron_id or synapse.to == neuron_id then
+            table.remove(self.synapses, i)
+        end
+    end
+    
+    return true
+end
+
     -- Получить статистику
     function brain:get_stats()
         local neuron_count = 0

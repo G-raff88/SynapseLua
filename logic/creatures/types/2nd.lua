@@ -41,10 +41,12 @@ function Creature.new()
     -- Добавляем мышцы
     local muscle1 = require("logic.muscles.types.move_forward")
     local muscle2 = require("logic.muscles.types.rotate")
+    local muscle3 = require("logic.muscles.types.eat")
     creature.muscles = creature.muscles or {}
     creature.muscles[#creature.muscles + 1] = muscle1.new({1}, 2)   -- Двигаться вперед/назад
     creature.muscles[#creature.muscles + 1] = muscle2.new({2}, 0.2) -- Поворот
-    
+    creature.muscles[#creature.muscles + 1] = muscle3.new(50) -- Поворот
+
     return creature
 end
 

@@ -23,6 +23,7 @@ function Creature.new()
     creature.muscles[#creature.muscles + 1] = muscle1.new({1})
     creature.muscles[#creature.muscles + 1] = muscle2.new({2})
     
+    creature.tags.food = true
     creature.color = 300
 
     return creature
