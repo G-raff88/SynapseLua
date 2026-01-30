@@ -13,9 +13,21 @@ function Creature.new()
     -- 1-3: сенсоры-лучи
     -- 4: таймер синус
     -- 5: таймер косинус
-    local brain = BrainFactory.new(5, 2, 4, 35)
+    local brain = BrainFactory.new(5, 2, 4, 0)
     local creature = CreatureFactory.new({x = 300, y = 300}, 0, brain)
-    
+
+    for i=1,5 do
+        for ii=8,11 do
+            creature.brain:add_synapse(i,ii)
+        end
+    end
+
+    for i=8,11 do
+        for ii=6,7 do
+            creature.brain:add_synapse(i,ii)
+        end
+    end
+
     -- Добавляем сенсоры-лучи
     creature.sensors = creature.sensors or {}
     creature.sensors[#creature.sensors + 1] = RaySensor.new(1, 0, 150, {0.9, 0.2, 0.2, 0.7})      -- Прямо

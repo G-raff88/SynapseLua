@@ -1,12 +1,13 @@
 Creature = {}
 
-function Creature.new(pos, rot, brain, sensors, muscles, energy, radius, color)
+function Creature.new(pos, rot, brain, sensors, muscles, tags, energy, radius, color)
     local creature = {
         pos = pos or {x = 100, y = 100};
         rot = rot or 0;
         brain = brain or {};
         sensors = sensors or {};
         muscles = muscles or {};
+        tags = tags or {};
         energy = energy or 100;
         radius = radius or 10;
         color = color or 10;

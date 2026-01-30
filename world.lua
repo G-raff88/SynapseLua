@@ -4,13 +4,13 @@ function World.new(width, height)
     local world = {
         creatures = {};
         time = 0;
-        step_time = 1;
+        step_time = 0.2;
         last_step_time = 0;
         width = width or 600;
         height = height or 600
     }
 
-    function world:update(dt)
+    function world:update(creature, world, dt)
         self.time = self.time + dt
         
         -- Обновляем каждое существо
@@ -26,13 +26,13 @@ function World.new(width, height)
             
             -- 2. Обновляем входы мозга (если есть сенсоры с данными)
             if creature.sensors then
-                for i, sensor in ipairs(creature.sensors) do
-                    if sensor.value and creature.brain and creature.brain.set_input then
-                        creature.brain:set_input(i, sensor.value)
+                for _, sensors in ipairs(creature.sensors) do
+                    if sensors.update then
+                        sensors:update(creature, world, dt)
                     end
                 end
             end
-            
+
             -- 3. Шаг мозга
             if creature.brain and creature.brain.step and self.last_step_time+self.step_time < self.time then
                 creature.brain:step()
@@ -46,7 +46,7 @@ function World.new(width, height)
                     end
                     
                     if muscle.move then
-                        muscle:move(creature)
+                        muscle:move(creature,world)
                     end
                 end
             end
@@ -68,8 +68,18 @@ function World.new(width, height)
 
     function world:draw()
         for _, creature in ipairs(self.creatures) do
-            love.graphics.setColor(0.9, 0.8, 0.2)
+            local color = creature.color
+            love.graphics.setColor(color/100,color%100/10,color%10)
             love.graphics.circle("fill", creature.pos.x or 0, creature.pos.y or 0, creature.radius or 5)
+
+            if creature.sensors then
+                for _, sensors in ipairs(creature.sensors) do
+                    if sensors then
+                        sensors:draw()
+                    end
+                end
+            end
+
         end
     end
 
