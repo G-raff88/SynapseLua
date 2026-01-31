@@ -18,9 +18,10 @@ function Reproduce.new(neuron_index)
             if creature.brain and creature.brain.get_output then
                 signal = creature.brain:get_output(self.neuron_index) or 0
             end
-            
-            if math.abs(signal) > 0.8 then
+
+            if math.abs(signal) > -0.5 then
                 -- Клонируем существо
+                print(1)
                 local clone_creature = clone(creature)
                 
                 -- Обновляем позицию
@@ -33,6 +34,7 @@ function Reproduce.new(neuron_index)
                 creature.energy = creature.energy / 2
                 clone_creature.energy = creature.energy
                 
+                clone_creature.brain:mutate()
                 -- Добавляем в мир
                 table.insert(world.creatures, clone_creature)
             end

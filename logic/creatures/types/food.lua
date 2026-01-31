@@ -9,7 +9,7 @@ function Creature.new()
     local RaySensor = require("logic.sensors.types.ray_sensor")
     local TimeSensor = require("logic.sensors.types.sin_timer")
 
-    local brain = BrainFactory.new(2, 2, 2, 20)
+    local brain = BrainFactory.new(2, 2, 2, 400)
     local creature = CreatureFactory.new({x = 300, y = 300}, 0, brain)
     
     -- Добавляем сенсоры времени (синус и косинус)
@@ -23,6 +23,7 @@ function Creature.new()
     creature.muscles[#creature.muscles + 1] = muscle1.new({1})
     creature.muscles[#creature.muscles + 1] = muscle2.new({2})
     
+    creature.energy = 20
     creature.tags.food = true
     creature.color = 300
 

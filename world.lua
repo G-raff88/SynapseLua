@@ -13,6 +13,15 @@ function World.new(width, height)
     function world:update(creature, world, dt)
         self.time = self.time + dt
         
+
+        for i = #self.creatures, 1, -1 do
+            local creature = self.creatures[i]
+    
+            if creature.energy and creature.energy <= 0 then
+                table.remove(self.creatures, i)
+            end
+        end
+
         -- Обновляем каждое существо
         for _, creature in ipairs(self.creatures) do
             -- 1. Обновляем сенсоры

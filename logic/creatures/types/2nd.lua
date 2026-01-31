@@ -13,20 +13,21 @@ function Creature.new()
     -- 1-3: сенсоры-лучи
     -- 4: таймер синус
     -- 5: таймер косинус
-    local brain = BrainFactory.new(5, 2, 4, 0)
+    local brain = BrainFactory.new(5, 3, 4, 3, 40)
     local creature = CreatureFactory.new({x = 300, y = 300}, 0, brain)
 
-    for i=1,5 do
-        for ii=8,11 do
-            creature.brain:add_synapse(i,ii)
-        end
-    end
+    -- for i=1,5 do
+    --     for ii=8,11 do
+    --         creature.brain:add_synapse(i,ii)
+    --     end
+    -- end
 
-    for i=8,11 do
-        for ii=6,7 do
-            creature.brain:add_synapse(i,ii)
-        end
-    end
+    -- for i=8,11 do
+    --     for ii=6,7 do
+    --         creature.brain:add_synapse(i,ii)
+    --     end
+    -- end
+
 
     -- Добавляем сенсоры-лучи
     creature.sensors = creature.sensors or {}
@@ -35,17 +36,24 @@ function Creature.new()
     creature.sensors[#creature.sensors + 1] = RaySensor.new(3, -math.pi/4, 120, {0.2, 0.2, 0.9, 0.7}) -- 45° влево
     
     -- Добавляем сенсоры времени (синус и косинус)
-    creature.sensors[#creature.sensors + 1] = TimeSensor.new(4, 0.5, 1.0, 0)      -- sin, 0.5 Гц
-    creature.sensors[#creature.sensors + 1] = TimeSensor.new(5, 0.5, 1.0, math.pi/2) -- cos, 0.5 Гц
+    --creature.sensors[#creature.sensors + 1] = TimeSensor.new(4, 0.5, 1.0, 0)      -- sin, 0.5 Гц
+    --creature.sensors[#creature.sensors + 1] = TimeSensor.new(5, 0.5, 1.0, math.pi/2) -- cos, 0.5 Гц
     
     -- Добавляем мышцы
     local muscle1 = require("logic.muscles.types.move_forward")
     local muscle2 = require("logic.muscles.types.rotate")
     local muscle3 = require("logic.muscles.types.eat")
+    local muscle4 = require("logic.muscles.types.reproduce")
+    local muscle5 = require("logic.muscles.types.photosynthesis")
     creature.muscles = creature.muscles or {}
-    creature.muscles[#creature.muscles + 1] = muscle1.new({1}, 2)   -- Двигаться вперед/назад
-    creature.muscles[#creature.muscles + 1] = muscle2.new({2}, 0.2) -- Поворот
-    creature.muscles[#creature.muscles + 1] = muscle3.new(50) -- Поворот
+    creature.muscles[#creature.muscles + 1] = muscle1.new({1}, 10)   -- Двигаться вперед/назад
+    creature.muscles[#creature.muscles + 1] = muscle2.new({2}, 0.2)
+    creature.muscles[#creature.muscles + 1] = muscle2.new({3}, -0.2)-- Поворот
+    creature.muscles[#creature.muscles + 1] = muscle3.new(creature.radius)
+    creature.muscles[#creature.muscles + 1] = muscle4.new({4})
+    creature.muscles[#creature.muscles + 1] = muscle5.new({-1}, -0.05)
+
+    creature.energy = 20
 
     return creature
 end

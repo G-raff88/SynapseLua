@@ -42,56 +42,63 @@ function TimeSensor.new(neuron_index, frequency, amplitude, phase)
         end
     end
     
-    -- Отрисовка сенсора (опционально, для визуализации)
+
+
     function sensor:draw()
-        -- Можно нарисовать индикатор, если нужно
-        local x = 20
-        local y = 20 + (self.neuron_index - 1) * 30
+        if not self.start_point or not self.end_point then
+            return
+        end
+    end
+--     -- Отрисовка сенсора (опционально, для визуализации)
+--     function sensor:draw()
+--         -- Можно нарисовать индикатор, если нужно
+--         local x = 20
+--         local y = 20 + (self.neuron_index - 1) * 30
         
-        -- Фон индикатора
-        love.graphics.setColor(0.2, 0.2, 0.3, 0.7)
-        love.graphics.rectangle("fill", x, y, 100, 20)
+--         -- Фон индикатора
+--         love.graphics.setColor(0.2, 0.2, 0.3, 0.7)
+--         love.graphics.rectangle("fill", x, y, 100, 20)
         
-        -- Значение
-        love.graphics.setColor(0.2, 0.8, 0.4)
-        local bar_width = 50 + 40 * self.signal_value  -- от 10 до 90
-        love.graphics.rectangle("fill", x + 25, y + 5, bar_width, 10)
+--         -- Значение
+--         love.graphics.setColor(0.2, 0.8, 0.4)
+--         local bar_width = 50 + 40 * self.signal_value  -- от 10 до 90
+--         love.graphics.rectangle("fill", x + 25, y + 5, bar_width, 10)
         
-        -- Текст
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print(string.format("Time %d: %.2f", 
-            self.neuron_index, self.signal_value), x + 5, y)
-    end
+--         -- Текст
+--         love.graphics.setColor(1, 1, 1)
+--         love.graphics.print(string.format("Time %d: %.2f", 
+--             self.neuron_index, self.signal_value), x + 5, y)
+--     end
     
-    -- Получить текущее значение сенсора
-    function sensor:get_value()
-        return self.signal_value
-    end
+--     -- Получить текущее значение сенсора
+--     function sensor:get_value()
+--         return self.signal_value
+--     end
     
-    -- Получить информацию о сенсоре
-    function sensor:get_info()
-        return {
-            type = "time_sensor",
-            frequency = self.frequency,
-            amplitude = self.amplitude,
-            phase = self.phase,
-            value = self.signal_value,
-            time = self.local_time
-        }
-    end
+--     -- Получить информацию о сенсоре
+--     function sensor:get_info()
+--         return {
+--             type = "time_sensor",
+--             frequency = self.frequency,
+--             amplitude = self.amplitude,
+--             phase = self.phase,
+--             value = self.signal_value,
+--             time = self.local_time
+--         }
+--     end
     
-    -- Сброс сенсора
-    function sensor:reset()
-        self.local_time = 0
-        self.signal_value = 0
-    end
+--     -- Сброс сенсора
+--     function sensor:reset()
+--         self.local_time = 0
+--         self.signal_value = 0
+--     end
     
-    -- Установить параметры
-    function sensor:set_params(frequency, amplitude, phase)
-        if frequency then self.frequency = frequency end
-        if amplitude then self.amplitude = amplitude end
-        if phase then self.phase = phase end
-    end
+--     -- Установить параметры
+--     function sensor:set_params(frequency, amplitude, phase)
+--         if frequency then self.frequency = frequency end
+--         if amplitude then self.amplitude = amplitude end
+--         if phase then self.phase = phase end
+--     end
 
     return sensor
 end

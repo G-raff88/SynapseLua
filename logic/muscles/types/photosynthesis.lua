@@ -6,13 +6,13 @@ function Muscle.new(neuron_indexes, strength)
         
         signals = {},
         
-        strength = strength or 1
+        strength = strength or 0.01
     }
     
     function muscle:update(creature)
         self.signals = {}
         for i, neuron_index in ipairs(self.output_indexes) do
-            creature.energy = creature.energy + 0.01
+            creature.energy = creature.energy + self.strength
         end
     end
 

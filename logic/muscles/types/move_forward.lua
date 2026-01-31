@@ -16,13 +16,12 @@ function Muscle.new(neuron_indexes, strength)
         end
     end
 
-    function muscle:move(creature)
-        if #self.signals >= 1 then
-            creature.pos.x = creature.pos.x + self.strength * self.signals[1] * math.sin(creature.rot)
-            creature.pos.y = creature.pos.y + self.strength * self.signals[1] * math.cos(creature.rot)
-        end
-        
+function muscle:move(creature)
+    if #self.signals >= 1 then
+        creature.pos.x = creature.pos.x + self.strength * self.signals[1] * math.cos(creature.rot)
+        creature.pos.y = creature.pos.y + self.strength * self.signals[1] * math.sin(creature.rot)
     end
+end
     
     return muscle
 end

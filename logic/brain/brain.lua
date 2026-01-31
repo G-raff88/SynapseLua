@@ -2,7 +2,7 @@
 local NeuroBrain = {}  -- Это ФАБРИКА (модуль)
 
 -- Метод фабрики для создания нового мозга
-function NeuroBrain.new(input_count, output_count, hidden_count, synapses_count)
+function NeuroBrain.new(input_count, output_count, hidden_count, bias_count, synapses_count)
     math.randomseed(os.time())
     hidden_count = hidden_count or 5
     synapses_count = synapses_count or 20
@@ -53,6 +53,17 @@ function NeuroBrain.new(input_count, output_count, hidden_count, synapses_count)
             type = "hidden"
         }
     end
+
+    for i = 1, bias_count do
+        local neuron_id = brain.next_neuron_id
+        brain.next_neuron_id = brain.next_neuron_id + 1
+        
+        brain.neurons[neuron_id] = {
+            id = neuron_id,
+            activation = 1.0,  -- Всегда активен!
+            type = "bias"
+        }
+    end
     
     -- Добавляем случайные связи
     for i = 1, synapses_count do
@@ -79,37 +90,37 @@ function NeuroBrain.new(input_count, output_count, hidden_count, synapses_count)
     -- Эти методы работают с КОНКРЕТНЫМ мозгом
     
     -- Шаг работы мозга
-    function brain:step()
-        -- 1. Копируем текущие активации
-        local new_activations = {}
-        for id, neuron in pairs(self.neurons) do
-            new_activations[id] = neuron.activation
-        end
-        
-        -- 2. Обнуляем скрытые и выходные нейроны
-        for id, neuron in pairs(self.neurons) do
-            if neuron.type ~= "input" then
-                new_activations[id] = 0
-            end
-        end
-        
-        -- 3. Передаем сигналы по синапсам
-        for _, synapse in ipairs(self.synapses) do
-            local from_neuron = self.neurons[synapse.from]
-            if from_neuron and math.abs(from_neuron.activation) > 0.1 then
-                new_activations[synapse.to] = new_activations[synapse.to] + 
-                    from_neuron.activation * synapse.weight
-            end
-        end
-        
-        -- 4. Применяем функцию активации
-        for id, activation in pairs(new_activations) do
-            local neuron = self.neurons[id]
-            if neuron and neuron.type ~= "input" then
-                neuron.activation = math.tanh(activation)
-            end
+function brain:step()
+    -- 1. Копируем текущие активации
+    local new_activations = {}
+    for id, neuron in pairs(self.neurons) do
+        new_activations[id] = neuron.activation
+    end
+    
+    -- 2. Обнуляем скрытые и выходные нейроны (но не bias!)
+    for id, neuron in pairs(self.neurons) do
+        if neuron.type == "hidden" or neuron.type == "output" then
+            new_activations[id] = 0
         end
     end
+    
+    -- 3. Передаем сигналы по синапсам
+    for _, synapse in ipairs(self.synapses) do
+        local from_neuron = self.neurons[synapse.from]
+        if from_neuron then
+            new_activations[synapse.to] = new_activations[synapse.to] + 
+                from_neuron.activation * synapse.weight
+        end
+    end
+    
+    -- 4. Применяем функцию активации
+    for id, activation in pairs(new_activations) do
+        local neuron = self.neurons[id]
+        if neuron and (neuron.type == "hidden" or neuron.type == "output") then
+            neuron.activation = math.tanh(activation)
+        end
+    end
+end
     
     -- Установить входное значение
     function brain:set_input(index, value)
@@ -224,6 +235,15 @@ function brain:remove_neuron(neuron_id)
     end
     
     return true
+end
+
+function brain:mutate(strength)
+    strength = strength or 0.1
+    
+    for i, synapse in ipairs(self.synapses) do
+        local change = (math.random() * 2 - 1) * strength
+        synapse.weight = synapse.weight + change
+    end
 end
 
     -- Получить статистику
